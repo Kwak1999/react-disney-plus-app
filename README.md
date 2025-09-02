@@ -1,70 +1,47 @@
-# Getting Started with Create React App
+# 🎬 Disney Plus Clone (React)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React를 활용하여 Disney Plus 클론 애플리케이션을 제작하는 프로젝트입니다.  
+현재는 **기본 세팅, The Movie DB API 연동, 네비게이션 및 배너 UI 구현**까지 진행된 상태입니다.  
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 데모
+(추후 배포 후 링크 추가 예정)
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## ✨ 구현된 기능
+- Create React App으로 초기 프로젝트 세팅
+- The Movie DB API Key 발급 및 Axios 인스턴스 생성
+- Disney Plus 애플리케이션 전체 구조 설계
+- 네비게이션 바(Navbar) 컴포넌트 생성 및 스타일링
+- 네비게이션 바 스크롤 이벤트 구현
+- Styled Components 적용
+- 배너 컴포넌트 생성 (이미지/비디오 UI, 유튜브 영상 재생 테스트)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
+## 🛠 기술 스택
 
-### `npm test`
+- React 19.1.1
+- React DOM 19.1.1
+- Axios (API 요청)
+- Styled Components (스타일링)
+- The Movie DB API (데이터 제공)
+- React Scripts 5.0.1
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## ⚙️ 설치 & 실행
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+# 클론하기
+git clone https://github.com/Kwak1999/react-disney-plus-app.git
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# 폴더 이동
+cd react-disney-plus-app
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# 패키지 설치
+npm install
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# 개발 서버 실행
+npm start
