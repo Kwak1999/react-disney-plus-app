@@ -42,6 +42,9 @@ cd react-disney-plus-app
 
 # 패키지 설치
 npm install
+npm install react-router-dom
+npm install styled-components
+npm install axios
 
 # 개발 서버 실행
 npm start
