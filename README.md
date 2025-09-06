@@ -18,6 +18,7 @@ React를 활용하여 Disney Plus 클론 애플리케이션을 제작하는 프�
 - 네비게이션 바 스크롤 이벤트 구현
 - Styled Components 적용
 - 배너 컴포넌트 생성 (이미지/비디오 UI, 유튜브 영상 재생 테스트)
+- hover 시 video 재생
 
 ---
 ## 🛠 기술 스택
