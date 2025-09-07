@@ -2,6 +2,17 @@ import React, {useCallback, useEffect, useState} from "react";
 import axios from "../api/axios";
 import "./Row.css"
 import MovieModal from "./MovieModal/MovieModal";
+import styled from "styled-components";
+
+import {Navigation, Pagination, Scrollbar, A11y} from "swiper/modules";
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// import swiper style
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/scrollbar";
+import "swiper/css/pagination";
+
 
 // `Row` 컴포넌트는 영화 리스트를 가로로 스크롤하는 UI를 렌더링합니다.
 // props로 받은 `title`, `id`, `fetchUrl`을 사용해 특정 카테고리의 영화 데이터를 가져옵니다.
@@ -33,56 +44,96 @@ const Row = ({title, id, fetchUrl}) => {
     }
 
     return (
-        <div>
+        <Container>
             <h2>{title}</h2>
-            {/* 영화 포스터를 좌우로 스크롤하는 슬라이더 섹션 */}
-            <div className="slider">
-                <div className="slider__arrow-left">
-                    {/* 왼쪽 화살표 클릭 시 슬라이더를 왼쪽으로 스크롤 */}
-                    <span className="arrow"
-                          onClick={() => {
-                              document.getElementById(id).scrollLeft -= window.innerWidth - 80
-                          }}>
-                        {"<"}
-                    </span>
-                </div>
-                {/* 각 영화 포스터를 담는 컨테이너 */}
-                <div id={id} className="row__posters">
-                    {/* `movies` 배열을 순회하며 각 영화의 포스터를 렌더링 */}
-                    {movies.map((movie) => (
-                        <img
-                            key={movie.id}
-                            className="row__poster"
-                            src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
-                            alt={movie.name}
-                            // 클릭 시 `handleClick` 함수를 호출하여 모달을 열고 데이터를 설정
-                            onClick={() => handleClick(movie)}
-
-                        />
+            <Swiper
+                // install Swiper modules
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                loop={true} //loop 기능을 사용할 것인지
+                navigation // arrow 버튼 사용 유무
+                pagination={{ clickable: true }} //페이지 버튼 보이게 할지
+                breakpoints={{
+                    1378: {
+                        slidesPerView: 6, //한번에 보이는 슬라이드 개수
+                        slidesPerGroup: 6,
+                    },
+                    998: {
+                        slidesPerView: 5, //한번에 보이는 슬라이드 개수
+                        slidesPerGroup: 5,
+                    },
+                    625: {
+                        slidesPerView: 4, //한번에 보이는 슬라이드 개수
+                        slidesPerGroup: 4,
+                    },
+                    0: {
+                        slidesPerView: 3, //한번에 보이는 슬라이드 개수
+                        slidesPerGroup: 3,
+                    },
+                }}
+            >
+                <Content id={id}>
+                    {movies.map(movie => (
+                        <SwiperSlide key={movie.id}>
+                            <Wrap>
+                                <img
+                                    key={movie.id}
+                                    src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+                                    alt={movie.name}
+                                    onClick={() => handleClick(movie)}
+                                />
+                            </Wrap>
+                        </SwiperSlide>
                     ))}
-                </div>
-                <div className="slider__arrow-right">
-                    {/* 오른쪽 화살표 클릭 시 슬라이더를 오른쪽으로 스크롤 */}
-                    <span className="arrow"
-                          onClick={() => {
-                              document.getElementById(id).scrollLeft += window.innerWidth - 80
-                          }}>
-                        {">"}
-                    </span>
-                </div>
-            </div>
+                </Content>
+            </Swiper>
 
-            {/* `modalOpen` 상태가 true일 때만 `MovieModal` 컴포넌트를 렌더링 */}
+
             {modalOpen &&
                 <MovieModal
-                    // 선택된 영화 데이터를 props로 전달
                     {...movieSelected}
-                    // 모달을 닫는 함수를 props로 전달
                     setModalOpen={setModalOpen}
                 />
             }
-        </div>
+        </Container>
     )
 }
 
 export default Row;
+
+const Container = styled.div`
+  padding: 0 0 26px;
+`;
+
+const Content = styled.div``;
+
+const Wrap = styled.div`
+  width: 95%;
+  height: 95%;
+  padding-top: 56.25%;
+  border-radius: 10px;
+  box-shadow: rgb(0 0 0/69%) 0px 26px 30px -10px,
+              rgb(0 0 0/73%) 0px 16px 10px -10px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
+  border: 3px solid rgba(249, 249, 249, 0.1);
+
+  img {
+    inset: 0px;
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+    position: absolute;
+    width: 100%;
+    transition: opacity 500ms ease-in-out;
+    z-index:1;
+  }
+  &:hover {
+    box-shadow: rgb(0 0 0 / 80%) 0px 40px 58px -16px,
+       rgb(0 0 0 / 72%) 0px 30px 22px -10px;
+    transform: scale(0.98);
+    border-color: rgba(249, 249, 249, 0.8);
+  }
+`;

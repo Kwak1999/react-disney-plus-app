@@ -9,15 +9,16 @@ const Nav = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-
+        window.addEventListener('scroll', handleScroll)
         return () => {
-            window.removeEventListener('scroll', () => {})
+            window.removeEventListener('scroll', handleScroll);
         }
-    }, []);
+    }, [])
+
+    // console.log('useLocation.search', useLocation().search);
 
     const handleScroll = () => {
-        if(window.scrollY > 50) {
+        if (window.scrollY > 50) {
             setShow(true);
         } else {
             setShow(false);
@@ -33,7 +34,7 @@ const Nav = () => {
         <NavWrapper show={show}>
             <Logo>
                 <img
-                    alt="Disney Logo"
+                    alt="Disney Plus Logo"
                     src="/images/logo.svg"
                     onClick={() => (window.location.href = "/")}
                 />
@@ -44,9 +45,11 @@ const Nav = () => {
                 <Input
                     value={searchValue}
                     onChange={handleChange}
-                    className="nav__input"
+                    className='nav__input'
                     type="text"
-                    placeholder='검색해주세요.' />}
+                    placeholder='검색해주세요.'
+                />
+            }
         </NavWrapper>
     )
 }
@@ -95,16 +98,15 @@ const NavWrapper = styled.nav`
 `;
 
 const Logo = styled.a`
-    padding: 0;
+    padding:0;
     width: 80px;
     margin-top: 4px;
     max-height: 70px;
     font-size: 0;
-    display: inline-block;
-    
-    img{
+    diplay: inline-block;
+
+    img {
         display: block;
         width: 100%;
     }
-    
-`;
+`
