@@ -22,7 +22,7 @@ const MainPage = () => {
     );
 };
 
-export default MainPage;
+export default MainPage
 
 const Container = styled.main`
     position: relative;

@@ -63,4 +63,4 @@ const MovieModal = ({
     )
 }
 
-export default MovieModal;
+export default MovieModal
