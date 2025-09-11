@@ -1,7 +1,8 @@
 # 🎬 Disney Plus Clone (React)
 
 React를 활용하여 Disney Plus 클론 애플리케이션을 제작하는 프로젝트입니다.  
-현재는 **기본 세팅, The Movie DB API 연동, 네비게이션 및 배너 UI 구현**까지 진행된 상태입니다.  
+firebase를 이용한 배포 및 인증인가, Movie DB API를 활용한 영화 검색 및 조회,
+비디오 재생 등 여러가지 기능을 구현해보며 숙련도를 조금 더 발전시켰습니다.
 
 ---
 
@@ -12,13 +13,11 @@ https://react-disney-plus-app-5aee8.web.app
 ---
 
 ## ✨ 구현된 기능
-- Create React App으로 초기 프로젝트 세팅
-- The Movie DB API Key 발급 및 Axios 인스턴스 생성
-- Disney Plus 애플리케이션 전체 구조 설계
-- 네비게이션 바(Navbar) 컴포넌트 생성 및 스타일링
+- firebase 구글 로그인
+- 영화 이미지 클릭시 자세히 보기(modal)
+- 영화 검색 기능
 - 네비게이션 바 스크롤 이벤트 구현
 - Styled Components 적용
-- 배너 컴포넌트 생성 (이미지/비디오 UI, 유튜브 영상 재생 테스트)
 - hover 시 video 재생
 
 ---
