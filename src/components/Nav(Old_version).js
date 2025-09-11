@@ -2,94 +2,101 @@ import React, {useEffect, useRef, useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth'
-import {useDebounce} from "../hook/useDebounce";
+// import {useDebounce} from "../hook/useDebounce";
 
 const Nav = () => {
-
-    const initialUserData = localStorage.getItem('userData') ?
-        JSON.parse(localStorage.getItem('userData')) : {};
-
-    const [show, setShow] = useState(false);
-    const { pathname } = useLocation();
-    // const [searchValue, setSearchValue] = useState("");
-    const navigate = useNavigate();
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { pathname, search } = location;
+
+    const initialUserData = localStorage.getItem('userData')
+        ? JSON.parse(localStorage.getItem('userData'))
+        : {};
+
     const [userData, setUserData] = useState(initialUserData);
+    const [show, setShow] = useState(false);
+
+    // ✅ URL 초기 q만 반영(마운트 시 1회)
+    const [searchValue, setSearchValue] = useState(() => {
+        return new URLSearchParams(search).get('q') || '';
+    });
+
+    // ✅ IME(한글) 조합 상태
+    const [isComposing, setIsComposing] = useState(false);
+
+    // ✅ 우리가 보낸 navigate 인지 표시
+    const selfNavRef = useRef(false);
 
     const inputRef = useRef(null);
 
-    const { search } = useLocation();
-
-    const query = new URLSearchParams(search).get("q") || "";
-    const [searchValue, setSearchValue] = useState(query);
-
-    const debouncedSearchValue = useDebounce(searchValue, 500);
-
-    // URL → state 동기화
+    // ✅ 외부 내비게이션(뒤/앞/딥링크)일 때만 URL → state 동기화
     useEffect(() => {
-        setSearchValue(query);
-    }, [query]);
-
-    // 디바운스된 값이 바뀌면 navigate
-    useEffect(() => {
-        // debouncedSearchValue가 공백이 아니거나, 처음 입력한 글자가 있을 때 실행
-        if (debouncedSearchValue !== query) {
-            navigate(`/search?q=${encodeURIComponent(debouncedSearchValue)}`, { replace: true });
+        if (selfNavRef.current) {
+            selfNavRef.current = false; // 내부 내비게이션은 무시
+            return;
         }
-    }, [debouncedSearchValue]); // eslint-disable-line react-hooks/exhaustive-deps
+        const q = new URLSearchParams(location.search).get('q') || '';
+        setSearchValue(q);
+    }, [location.search]);
 
+    // ✅ /search 에서만 자동 포커스
     useEffect(() => {
-        if (inputRef.current && document.activeElement !== inputRef.current) {
+        if (pathname.startsWith('/search') && inputRef.current && document.activeElement !== inputRef.current) {
             inputRef.current.focus();
         }
-    }, [pathname]); // 경로 바뀔 때마다 확인
+    }, [pathname]);
 
-
+    // ✅ 스크롤 배경 처리
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
+        const handleScroll = () => setShow(window.scrollY > 50);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // ✅ 인증 상태 변화
+    useEffect(() => {
+        const unsub = onAuthStateChanged(auth, (user) => {
             if (user) {
-                if (pathname === "/") {
-                    navigate("/main");
-                }
+                if (pathname === '/') navigate('/main');
             } else {
-                navigate("/");
+                navigate('/');
             }
-        })
-    }, [auth, navigate, pathname])
+        });
+        return () => unsub();
+    }, [auth, navigate, pathname]);
 
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll)
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        }
-    }, [])
+    const updateURL = (value) => {
+        selfNavRef.current = true;
+        navigate(`/search?q=${encodeURIComponent(value)}`, { replace: true });
+    };
 
-    // console.log('useLocation.search', useLocation().search);
-
-    const handleScroll = () => {
-        if (window.scrollY > 50) {
-            setShow(true);
-        } else {
-            setShow(false);
-        }
-    }
-
+    // ✅ 실시간 입력: IME 조합 중이 아닐 때만 URL 반영
     const handleChange = (e) => {
-        setSearchValue(e.target.value);
-        // navigate(`/search?q=${e.target.value}`);
-    }
+        const next = e.target.value;
+        setSearchValue(next);
+        if (!isComposing) updateURL(next);
+    };
+
+    const handleCompositionStart = () => setIsComposing(true);
+
+    const handleCompositionEnd = (e) => {
+        setIsComposing(false);
+        const next = e.currentTarget.value; // 확정된 문자열
+        setSearchValue(next);
+        updateURL(next); // 조합 종료 시 1회 반영
+    };
 
     const handleAuth = () => {
         signInWithPopup(auth, provider)
-            .then(result => {
+            .then((result) => {
                 setUserData(result.user);
-                localStorage.setItem("userData", JSON.stringify(result.user));
+                localStorage.setItem('userData', JSON.stringify(result.user));
             })
-            .catch(error => {
-                console.log(error);
-            })
-    }
+            .catch(console.log);
+    };
 
     const handleSignOut = () => {
         signOut(auth)
@@ -97,10 +104,8 @@ const Nav = () => {
                 setUserData({});
                 navigate(`/`);
             })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
+            .catch(console.log);
+    };
 
     return (
         <NavWrapper show={show}>
@@ -108,20 +113,23 @@ const Nav = () => {
                 <img
                     alt="Disney Plus Logo"
                     src="/images/logo.svg"
-                    onClick={() => (window.location.href = "/")}
+                    onClick={() => (window.location.href = '/')}
                 />
             </Logo>
 
-            {pathname === "/" ?
-                (<Login onClick={handleAuth}>Login</Login>) :
+            {pathname === '/' ? (
+                <Login onClick={handleAuth}>Login</Login>
+            ) : (
                 <>
                     <Input
                         ref={inputRef}
                         value={searchValue}
                         onChange={handleChange}
-                        className='nav__input'
+                        onCompositionStart={handleCompositionStart}
+                        onCompositionEnd={handleCompositionEnd}
+                        className="nav__input"
                         type="text"
-                        placeholder='검색해주세요.'
+                        placeholder="검색해주세요."
                     />
 
                     <SignOut>
@@ -131,12 +139,12 @@ const Nav = () => {
                         </DropDown>
                     </SignOut>
                 </>
-            }
+            )}
         </NavWrapper>
-    )
-}
+    );
+};
 
-export default Nav
+export default Nav;
 
 const DropDown = styled.div`
     position: absolute;
