@@ -45,6 +45,12 @@ const Nav = () => {
         }
     }, [pathname]); // 경로 바뀔 때마다 확인
 
+    useEffect(() => {
+        // pathname이 /main일 때 포커스 해제
+        if (pathname === '/main' && inputRef.current) {
+            inputRef.current.blur();
+        }
+    }, [pathname]);
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -77,8 +83,12 @@ const Nav = () => {
 
     const handleChange = (e) => {
         setSearchValue(e.target.value);
-        // navigate(`/search?q=${e.target.value}`);
+        navigate(`/search?q=${e.target.value}`);
     }
+
+    const handleClick = () => {
+        navigate(`/search?q=${encodeURIComponent(searchValue || "")}`);
+    };
 
     const handleAuth = () => {
         signInWithPopup(auth, provider)
@@ -119,6 +129,7 @@ const Nav = () => {
                         ref={inputRef}
                         value={searchValue}
                         onChange={handleChange}
+                        onClick={handleClick}
                         className='nav__input'
                         type="text"
                         placeholder='검색해주세요.'
