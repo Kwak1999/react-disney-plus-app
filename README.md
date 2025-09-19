@@ -46,21 +46,14 @@ cd react-disney-plus-app
 
 # 3. 패키지 설치
 npm install
-
-# Firebase
-npm install firebase
-
-# Styled Components (CSS-in-JS)
-npm install styled-components
-
-# Axios (API 요청)
-npm install axios
-
-# Swiper (슬라이더 UI)
-npm install swiper
+npm install firebase # Firebase
+npm install styled-components # Styled Components (CSS-in-JS)
+npm install axios # Axios (API 요청)
+npm install swiper # Swiper (슬라이더 UI)
+npm install @reduxjs/toolkit react-redux # redux-toolkit
 
 # 4. 개발 서버 실행
-npm start
+npm run start
 ```
 
 ## 참고자료
