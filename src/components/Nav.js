@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth'
 import {useDebounce} from "../hook/useDebounce";
+import {useDispatch, useSelector} from "react-redux";
+import {removeUser, setUser} from "../store/userSlice";
 
 const Nav = () => {
 
@@ -15,7 +17,6 @@ const Nav = () => {
     const navigate = useNavigate();
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
-    const [userData, setUserData] = useState(initialUserData);
 
     const inputRef = useRef(null);
 
@@ -25,6 +26,10 @@ const Nav = () => {
     const [searchValue, setSearchValue] = useState(query);
 
     const debouncedSearchValue = useDebounce(searchValue, 500);
+
+    const dispatch = useDispatch();
+
+    const userData = useSelector(state => state.user);
 
     // URL → state 동기화
     useEffect(() => {
@@ -93,8 +98,12 @@ const Nav = () => {
     const handleAuth = () => {
         signInWithPopup(auth, provider)
             .then(result => {
-                setUserData(result.user);
-                localStorage.setItem("userData", JSON.stringify(result.user));
+                dispatch(setUser({
+                    id: result.user.uid,
+                    email: result.user.email,
+                    displayName: result.user.displayName,
+                    photoURL: result.user.photoURL
+                }))
             })
             .catch(error => {
                 console.log(error);
@@ -102,14 +111,11 @@ const Nav = () => {
     }
 
     const handleSignOut = () => {
-        signOut(auth)
-            .then(() => {
-                setUserData({});
-                navigate(`/`);
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        signOut(auth).then(() =>{
+            dispatch(removeUser());
+        }).catch((error) => {
+            alert(error.message);
+        })
     }
 
     return (

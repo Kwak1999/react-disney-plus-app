@@ -4,15 +4,21 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
-import app from "./firebase";
+import {store} from './store';
+import {Provider} from "react-redux";
+
+// Firebase 초기화 코드를 가져옵니다.
+import './firebase';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-      <BrowserRouter>
-          <App />
-      </BrowserRouter>
-  </React.StrictMode>
+
+      <Provider store={store}>
+          <BrowserRouter>
+              <App />
+          </BrowserRouter>
+      </Provider>
+
 );
 
 // If you want to start measuring performance in your app, pass a function
