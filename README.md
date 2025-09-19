@@ -62,3 +62,8 @@ npm run start
 - Swiper 공식 사이트
 - Firebase 공식 문서
 - The Movie Database API
+
+---
+## Redux란?
+복잡한 애플리케이션의 상태를 효율적으로 관리하기 위한 도구
+모든 상태를 중앙의 **스토어(Store)**에 한데 모아 관리하며, 예측 불가능한 상태 변화를 방지
