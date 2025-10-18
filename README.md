@@ -56,6 +56,12 @@ npm install @reduxjs/toolkit react-redux # redux-toolkit
 npm run start
 ```
 
+```bash
+firebase init # 셋팅
+
+firebase deploy # firebase 실행
+```
+
 ## 참고자료
 
 - MDN Web Docs
