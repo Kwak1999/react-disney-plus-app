@@ -8,7 +8,7 @@ Firebase를 이용한 **배포 및 인증/인가**, The Movie DB API를 활용�
 
 ## 데모
 
-[https://react-disney-plus-app-5aee8.web.app](https://react-disney-plus-app-5aee8.web.app)
+[https://react-disney-plus-app-5aee8.web.app](https://react-disney-plus-app-5aee8.web.app/)
 
 ---
 
